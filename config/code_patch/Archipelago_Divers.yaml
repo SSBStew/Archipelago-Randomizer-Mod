@@ -1,0 +1,234 @@
+gml_Object_o19_Mas_Create_0:
+  - type: findprepend
+    find: |-
+        scrLoadGame();
+    code: |-
+        for (i = 0; i < 8; i++)
+            global.diversRelicCollected[i] = 0;
+        for (i = 0; i < 3; i++)
+            if (has_item(120 + i))
+                global.g19_emblem[i] = true;
+        for (i = 0; i < 9; i++)
+            scout_location(110 + i);
+        for (i = 0; i < 6; i++)
+            scout_location(120 + i);
+        for (i = 0; i < 9; i++)
+            scout_location(130 + i);
+        for (i = 0; i < 5; i++)
+            scout_location(140 + i);
+        for (i = 0; i < 3; i++)
+            scout_location(150 + i);
+gml_Object_o19_Mas_Draw_0:
+  - type: findreplacetrim
+    find: |-
+        if (i == menuSel)
+            textInsert = -8;
+    code: |-
+        if (i == menuSel)
+        {
+            var location = 110 + (10 * subMenu) + i;
+            player_id = get_location_player(location);
+            game_name = apclient_get_player_game(player_id);
+            item_name = apclient_get_item_name(get_location_item(location), game_name);
+            player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+            hint = item_name + "\n" + player_name;
+            draw_text(xv + 5, yv + 5, hint);
+            textInsert = -8;
+        }
+  - type: findreplacetrim
+    find: |-
+        var currItemName = ds_grid_get(global.g19_dsItem, itemListShop[subMenu][i], 0);
+        var currItemHold = global.g19_invStock[itemListShop[subMenu][i]];
+        var currItemMax = ds_grid_get(global.g19_dsItem, itemListShop[subMenu][i], 6);
+    code: |-
+        var currItemName = "AP" + ds_grid_get(global.g19_dsItem, itemListShop[subMenu][i], 0);
+        var currItemMax = 1;
+        var currItemHold = is_location_collected(110 + (10 * subMenu) + i);
+  - type: findappend
+    find: |-
+        var xRelic, yRelic;
+    code: |-
+        while (global.diversRelicCollected[i] < get_item_count(110 + i))
+        {
+            global.g19_relicStock[i] += 3;
+            global.diversRelicCollected[i]++;
+        }
+gml_Object_o19_Mas_Other_10:
+  - type: findreplacetrim
+    find: |-
+        currItemStock = global.g19_invStock[itemListShop[subMenu][pageLen]];
+        currItemMax = ds_grid_get(global.g19_dsItem, itemListShop[subMenu][pageLen], 6);
+    code: |-
+        currItemMax = 1;
+        currItemStock = is_location_collected(110 + (10 * subMenu) + pageLen);
+  - type: findprepend
+    find: |-
+        var loadItemCount = 0;
+    code: |-
+        for (i = 0; i < 85; i++)
+        {
+            global.g19_invStock[i] = get_item_count(i)
+        }
+  - type: findreplace
+    find: |-
+        global.g19_invStock[itemListShop[subMenu][menuSel]]++;
+    code: |-
+        collect_location(110 + (10 * subMenu) + menuSel);
+        scrSaveGame(0);
+gml_GlobalScript_scr19_SaveGame:
+  - type: findprepend
+    find: |-
+        scrWriteReal("level", global.g19_level);
+    code: |-
+        for (i = 0; i < 8; i++)
+            scrWriteReal("diversRelicCollected_" + string(i), global.diversRelicCollected[i]);
+  - type: findprepend
+    find: |-
+        global.g19_level = scrReadReal("level", 1);
+    code: |-
+        for (i = 0; i < 85; i++)
+            global.diversItemCollected[i] = scrReadReal("diversItemCollected_" + string(i), false);
+        for (i = 0; i < 8; i++)
+            global.diversRelicCollected[i] = scrReadReal("diversRelicCollected_" + string(i), false);
+  - type: findreplace
+    find: |-
+        global.g19_chestOpen[i] = scrReadReal("chestOpen_" + string(i), false);
+    code: |-
+        global.g19_chestOpen[i] = is_location_collected(i);
+gml_Object_o19_Mas_Other_12:
+  - type: findprepend
+    find: |-
+        global.g19_cash = min(global.g19_cash + sumAdd, 9999);
+    code: |-
+        var cashMult = 1;
+        t = get_item_count(90)
+        for (i = 0; i < t; i++)
+               cashMult = cashMult * 2;
+        sumAdd = sumAdd * cashMult;
+  - type: findprepend
+    find: |-
+        global.g19_experience += sumAdd;
+    code: |-
+        for (i = 0; i < 3; i++)
+            if (has_item(120 + i))
+                global.g19_emblem[i] = true;
+        var xpMult = 1;
+        var r = get_item_count(95)
+        for (i = 0; i < r; i++)
+               xpMult = xpMult * 2;
+        sumAdd = sumAdd * xpMult;
+gml_Object_o19_Chest_Step_0:
+  - type: findreplacetrim
+    find: |-
+        switch (type[num])
+            {
+                case "ITEM":
+                    if (instance_exists(oPlayer))
+                    {
+                        global.g19_pearlCount++;
+                        global.g19_pearlContent[global.g19_pearlCount] = value[num];
+                        
+                        if (global.g19_pearlCount == 1)
+                        {
+                            with (oPlayer)
+                            {
+                                for (var i = 0; i <= 40; i++)
+                                {
+                                    xPearl[i] = x;
+                                    yPearl[i] = y;
+                                }
+                            }
+                        }
+                    }
+                    
+                    break;
+                
+                case "CASH":
+                    global.g19_cash += value[num];
+                    global.g19_cash = min(9999, global.g19_cash);
+                    break;
+                
+                case "RELIC":
+                    global.g19_relicStock[value[num]]++;
+                    global.g19_relicStock[value[num]] = min(9, global.g19_relicStock[value[num]]);
+                    break;
+            }
+    code: |-
+        collect_location(num);
+gml_Object_o19_Lizard_Step_0:
+  - type: findreplace
+    find: |-
+        global.g19_emblem[emblem.num] = true;
+    code: |-
+        collect_location(100 + emblem.num);
+  - type: findreplacetrim
+    find: |-
+        if (cSwitch.state == 0)
+        {
+            cSwitch.state = 1;
+            
+            with (o19_Mas)
+                textBox = scr19_BGText("bg_flick_switch");
+        }
+        else
+        {
+            with (o19_Mas)
+                textBox = scr19_BGText("bg_switch_done");
+        }
+    code: |-
+        if (cSwitch.state == 0 && global.divers_lever_check == 0)
+        {
+            cSwitch.state = 1;
+            
+            with (o19_Mas)
+                textBox = scr19_BGText("bg_flick_switch");
+        }
+        else if (global.divers_lever_check == 0)
+        {
+            with (o19_Mas)
+                textBox = scr19_BGText("bg_switch_done");
+        }
+        else
+        {
+            cSwitch.state = 1;
+            o19_Mas.textBoxLines = 1;
+            o19_Mas.textBox[0] = "THE GATE OPENS FOR A MOMENT.";
+        }
+  - type: findreplacetrim
+    find: |-
+        switch (chestContent)
+        {
+            case "ITEM":
+                with (o19_Mas)
+                    textBox = scr19_BGText("bg_found_pearl");
+                
+                break;
+            
+            case "CASH":
+                o19_Mas.textBoxLines = 1;
+                o19_Mas.textBox[0] = scrStringVal("you_found_x", "%" + string(cChest.value[cChest.num]));
+                o19_Mas.drawCoin = true;
+                break;
+            
+            case "RELIC":
+                o19_Mas.relicRewardType = cChest.value[cChest.num];
+                o19_Mas.textBoxLines = 1;
+                o19_Mas.textBox[0] = scrStringVal("you_found_x", "%");
+                o19_Mas.drawRelic = true;
+                break;
+        }
+    code: |-
+        o19_Mas.textBoxLines = 1;
+        o19_Mas.textBox[0] = "YOU FOUND AN ITEM.";
+gml_Object_o19_GateV2_Create_0:
+  - type: findreplace
+    find: |-
+        if (global.g19_doorOpen[2] && global.g19_doorOpen[3])
+    code: |-
+        if ((global.g19_doorOpen[2] && global.g19_doorOpen[3] && global.divers_lever_check == 0) || (has_item(102) && has_item(103)))
+gml_Object_o19_Emblem_Step_0:
+  - type: findreplace
+    find: |-
+        if (global.g19_emblem[num])
+    code: |-
+        if (is_location_collected(100 + num))
