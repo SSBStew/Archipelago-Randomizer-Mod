@@ -1,0 +1,182 @@
+gml_Object_o12_mapChest_Step_0:
+  - type: findreplace
+    find: |-
+        if (!open)
+        {
+            if (o12__Game.chests[chestID] == 1)
+                open = true;
+        }
+    code: |-
+        if (!open && chestID != 0)
+        {
+            scout_location(chestID);
+            if (is_location_collected(chestID))
+                open = true;
+        }
+  - type: findreplacetrim
+    find: |-
+        if (activate)
+        {
+            if (!open)
+    code: |-
+        if (activate)
+        {
+            if (item == "FEATHER")
+                scr12_InvAdd("FEATHER");
+            if (!open)
+            {
+                o12__Game.chests[chestID] = 1;
+                collect_location(chestID);
+                player_id = get_location_player(chestID);
+                game_name = apclient_get_player_game(player_id);
+                player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+                item_name = apclient_get_item_name(get_location_item(chestID), game_name);
+                str1 = player_name;
+                str2 = item_name;
+                str3 = "";
+                str1 = string_upper(str1);
+                str2 = string_upper(str2);
+            }
+            else if (false)
+gml_Object_o12_mapChestCac_Step_0:
+  - type: findprepend
+    find: |-
+        if (open)
+    code: |-
+        collect_location(chestID);
+gml_Object_o12__Game_Other_14:
+  - type: prepend
+    code: |-
+        for (i = 0; i < 102; i++)
+        {
+            if (get_item_count(i) > itemCollected[i])
+            {
+                if (scr12_InvAdd(scr12_GetItemName(i), 1))
+                    itemCollected[i]++;
+                else
+                {
+                    isInvFull = true;
+                    messageTimer = 0;
+                }
+            }
+        }
+gml_Object_o12__Game_Create_0:
+  - type: prepend
+    code: |-
+        isInvFull = false;
+        messageTimer = 0;
+        for (i = 0; i < 102; i++)
+        {
+            itemCollected[i] = 0;
+        }
+gml_GlobalScript_scr12_SaveGame:
+  - type: findappend
+    find: |-
+        scrWriteReal("area", area);
+    code: |-
+        for (i = 0; i < 102; i++)
+            scrWriteReal("grimstoneitemCollected_" + string(i), itemCollected[i]);
+  - type: findappend
+    find: |-
+        story = scrReadReal("story", 0);
+    code: |-
+        for (i = 0; i < 102; i++)
+            itemCollected[i] = scrReadReal("grimstoneitemCollected_" + string(i), false);
+gml_Object_o12__Game_Draw_0:
+  - type: findappend
+    find: |-
+        viewyBot = viewy + 216;
+    code: |-
+        if (isInvFull)
+        {
+            draw_text(viewx + 5, viewy + 5, "INVENTORY FULL DROP ITEMS TO RECEIVE ITEMS");
+            messageTimer++;
+            if (messageTimer > 300)
+                isInvFull = false;
+        }
+gml_Object_o12__Game_Other_17:
+  - type: findreplace
+    find: |-
+        scr12_InvAdd("c CALAMITY", 1);
+    code: |-
+        collect_location(303);
+gml_Object_o12__Game_Other_13:
+  - type: findappendtrim
+    find: |-
+        if (!instance_exists(oTextBox))
+        {
+            if (story >= 26)
+            {
+                n = 0;
+                substate = GAMESTATE_BATTLE_VICTORY_RETURN_TO_MAP;
+            }
+            else
+            {
+                n = 0;
+    code: |-
+        if ((battleType > 0 && battleType < 13) || battleType == 14 || battleType == 18 || battleType == 20)
+            collect_location(battleType + 400);
+        var cashMult = 1;
+        tt = get_item_count(200);
+        for (ii = 0; ii < tt; ii++)
+               cashMult = cashMult * 2;
+        battleTeeth = battleTeeth * cashMult;
+        var xpMult = 1;
+        var rr = get_item_count(201);
+        for (ii = 0; ii < rr; ii++)
+               xpMult = xpMult * 2;
+        battleXP = battleXP * xpMult;
+  - type: findappend
+    find: |-
+        story = 9;
+    code: |-
+        o12__Game.storyRusty++;
+gml_Object_o12_mapDoor_Step_0:
+  - type: findappend
+    find: |-
+        o12__Game.story = 11;
+    code: |-
+        o12__Game.storyRusty += 2;
+gml_Object_o12_mapDoor_Step_1:
+  - type: findreplace
+    find: |-
+        if (o12__Game.story >= 11)
+    code: |-
+        if (o12__Game.storyRusty >= 2)
+gml_Object_o12_mapHiddenWall_Step_0:
+  - type: findreplace
+    find: |-
+        if (o12__Game.story >= 9)
+    code: |-
+        if (o12__Game.storyRusty == 1 || o12__Game.storyRusty == 3)
+gml_GlobalScript_scr12_ItemGetName:
+  - type: findprepend
+    find: |-
+        return _item;
+    code: |-
+        if (_item == "PASS")
+            return "PASS";
+gml_GlobalScript_scr12_InvSort:
+  - type: findappendtrim
+    find: |-
+        itemNameTemp[n] = "SCALE";
+        n += 1;
+    code: |-
+        itemNameTemp[n] = "PASS";
+        n += 1;
+  - type: findreplace
+    find: |-
+        for (var j = 0; j < 100; j++)
+    code: |-
+        for (var j = 0; j < 101; j++)
+  - type: findreplace
+    find: |-
+        for (var i = 0; i < 100; i++)
+    code: |-
+        for (var i = 0; i < 101; i++)
+gml_GlobalScript_scr12_ItemCheckType:
+  - type: findreplace
+    find: |-
+        if (_item == "TOOLBOX" || _item == "LETTER" || _item == "M. MIRROR" || _item == "RUSTY KEY" || _item == "DETONATOR" || _item == "DEVIL HORN" || _item == "HORSESHOE" || _item == "HAMMER" || _item == "SCALE")
+    code: |-
+        if (_item == "TOOLBOX" || _item == "LETTER" || _item == "M. MIRROR" || _item == "RUSTY KEY" || _item == "DETONATOR" || _item == "DEVIL HORN" || _item == "HORSESHOE" || _item == "HAMMER" || _item == "SCALE" || _item == "PASS")
