@@ -536,7 +536,7 @@ if (!global.textboxExists)
         {
             partyCheckFor = scr12_PartyCheckFor(o12__Game.PTYPE_DOG);
             
-            if (o12__Game.story < 14)
+            if (!is_location_collected(301))
             {
                 if (convo == 0)
                 {
