@@ -132,10 +132,12 @@ gml_Object_o12__Game_Other_13:
     code: |-
         o12__Game.storyRusty++;
 gml_Object_o12_mapDoor_Step_0:
-  - type: findappend
+  - type: findreplace
     find: |-
         o12__Game.story = 11;
     code: |-
+        if (o12__Game.story < 11)
+            o12__Game.story = 11;
         o12__Game.storyRusty += 2;
 gml_Object_o12_mapDoor_Step_1:
   - type: findreplace
@@ -180,3 +182,17 @@ gml_GlobalScript_scr12_ItemCheckType:
         if (_item == "TOOLBOX" || _item == "LETTER" || _item == "M. MIRROR" || _item == "RUSTY KEY" || _item == "DETONATOR" || _item == "DEVIL HORN" || _item == "HORSESHOE" || _item == "HAMMER" || _item == "SCALE")
     code: |-
         if (_item == "TOOLBOX" || _item == "LETTER" || _item == "M. MIRROR" || _item == "RUSTY KEY" || _item == "DETONATOR" || _item == "DEVIL HORN" || _item == "HORSESHOE" || _item == "HAMMER" || _item == "SCALE" || _item == "PASS")
+gml_Object_o12_mapHorseshoe_Step_0:
+  - type: findreplace
+    find: |-
+        o12__Game.story = 17;
+    code: |-
+        if (o12__Game.story < 17)
+            o12__Game.story = 17;
+gml_Object_o12_mapDynamite_Step_0:
+  - type: findreplace
+    find: |-
+        o12__Game.story = 13;
+    code: |-
+        if (o12__Game.story < 13)
+            o12__Game.story = 13;
