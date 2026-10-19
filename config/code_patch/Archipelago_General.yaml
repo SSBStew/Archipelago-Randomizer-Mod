@@ -409,3 +409,97 @@ gml_Object_oLibrary_Draw_0:
 
       if (substate == SUB_SORT_SELECT && global.selSort == global.SORT_PET)
         scrDrawTextInput(_sortButtonX, 206, scrStringVal("filter_button_list", "[2"), 0, 0, false);
+gml_GlobalScript_scrTermWarpCode:
+  - type: findprepend
+    find: |-
+        if (code == string_copy(stenAnswer, 4, 8))
+    code: |-
+        if (_cmd == "APCH" && global.server_release_mode > 0)
+        {
+            global.cheatID = 420;
+            global.cheatedBypassTitle = true;
+            global.cheatedNumPlayers = 1;
+            return _param;
+        }
+        if (_cmd == "APGO" && global.server_release_mode > 0)
+        {
+            global.cheatID = 421;
+            global.cheatedBypassTitle = true;
+            global.cheatedNumPlayers = 1;
+            return _param;
+        }
+gml_Object_oPauseMenu_Other_18:
+  - type: findappend
+    find: |-
+        var _result = scrPlayGame(_getGame);
+    code: |-
+        if (global.cheatID == 420)
+            scrWin(global.CHERRY_WIN);
+        if (global.cheatID == 421)
+            scrWin(global.GOLD_WIN);
+  - type: findreplace
+    find: |-
+        if (global.cheatID > 0 && _getGameID != 51)
+    code: |-
+        if (global.cheatID > 0 && _getGameID != 51 && global.cheatID != 420 && global.cheatID != 421)
+gml_Object_oPauseMenu_Create_0:
+  - type: findappend
+    find: |-
+        STATE_AUDIO = 5;
+    code: |-
+        STATE_APSETTINGS = 16;
+gml_Object_oPauseMenu_Other_22:
+  - type: findreplacetrim
+    find: |-
+        scrMenuSpacer(MENU_BIG_SPACER);
+        scrMenuSpacer(MENU_BIG_SPACER);
+    code: |-
+        OP_APSETTINGS = scrMenuItem(TYPE_SINGLE, "AP SETTINGS");
+        scrMenuSpacer(MENU_BIG_SPACER);
+  - type: findprepend
+    find: |-
+        if (statePrev == STATE_AUDIO)
+    code: |-
+        if (statePrev == STATE_APSETTINGS)
+            menuSel = OP_APSETTINGS;
+  - type: findprepend
+    find: |-
+        case OP_VIDEO:
+    code: |-
+        case OP_APSETTINGS:
+            scrSwitchState(STATE_APSETTINGS);
+            scrSfxLibrary(soundSubEnter[currentSoundSet]);
+            break;
+gml_Object_oPauseMenu_Draw_0:
+  - type: findreplacetrim
+    find: |-
+      else if (itemType[i] == TYPE_DUAL || itemType[i] == TYPE_DUAL_INT)
+      {
+          draw_text(LEFT_TEXT_X, _yPos, itemName[i]);
+          var _index = itemIndex[i];
+          var _values = itemValues[i];
+          draw_set_halign(fa_right);
+          draw_text(RIGHT_TEXT_X, _yPos, string(_values[_index]));
+          draw_set_halign(fa_left);
+          _yPos += 12;
+      }
+    code: |-
+      else if (itemType[i] == TYPE_DUAL || itemType[i] == TYPE_DUAL_INT)
+      {
+          draw_text(LEFT_TEXT_X, _yPos, itemName[i]);
+          var _index = itemIndex[i];
+          var _values = itemValues[i];
+          draw_set_halign(fa_right);
+          if (i <= 1  && menuHeader == "AP SETTINGS") {
+            var text = "OFF";
+            if (_values[_index] == 1)
+              text = "GOLD";
+            else if (_values[_index] == 2)
+              text = "CHERRY";
+            draw_text(RIGHT_TEXT_X, _yPos, text)
+          }
+          else
+            draw_text(RIGHT_TEXT_X, _yPos, string(_values[_index]));
+          draw_set_halign(fa_left);
+          _yPos += 12;
+      }
