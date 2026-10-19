@@ -64,11 +64,22 @@ gml_GlobalScript_scrSaveNotification:
 
       if (type == global.GARDEN_WIN || type == global.GARDEN_WIN_FAST)
         collect_location(997);
-      else if (type == global.GOLD_WIN || type == global.GOLD_WIN_FAST)
+      else if (type == global.GOLD_WIN || type == global.GOLD_WIN_FAST) {
         collect_location(998);
+        if (global.release_mode == 1 && global.server_release_mode != 0)
+        {
+            for (i = 0; i < 1000; i++)
+                collect_location(i);
+        }
+      }
       else if (type == global.CHERRY_WIN || type == global.CHERRY_WIN_FAST) {
         collect_location(998);
         collect_location(999);
+        if (global.release_mode >= 1 && global.server_release_mode != 0)
+        {
+            for (i = 0; i < 1000; i++)
+                collect_location(i);
+        }
       }
 
       if (type == global.GARDEN_WIN || type == global.GARDEN_WIN_FAST || type == global.GOLD_WIN || type == global.GOLD_WIN_FAST || type == global.CHERRY_WIN || type == global.CHERRY_WIN_FAST)
