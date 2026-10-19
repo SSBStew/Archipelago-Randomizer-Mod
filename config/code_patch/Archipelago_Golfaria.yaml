@@ -1,0 +1,614 @@
+gml_Object_o06__Game_Create_0:
+  - type: findreplacetrim
+    find: |-
+        golfSandRoll = false;
+        golfWaterRoll = false;
+        golfBuster = false;
+        golfBrake = false;
+    code: |-
+        golfSandRoll = true;
+        golfWaterRoll = true;
+        golfBuster = true;
+        golfBrake = true;
+        for (i = 1; i < 5; i++)
+            scout_location(i + 30);
+        for (i = 0; i < 4; i++)
+            scout_location(i + 50);
+gml_Object_o06__Game_Step_0:
+  - type: findreplace
+    find: |-
+        if (golfStrokes < 15)
+    code: |-
+        if (false)
+gml_Object_o06_ParBot_Other_10:
+  - type: findreplacetrim
+    find: |-
+        with (o06__Game)
+        {
+            for (var n = 0; n < 15; n++)
+            {
+                if (floor(parbot[n]) == 0)
+                {
+                    parbot[n] = floor(_x + (_y * 10000000));
+                    break;
+                }
+            }
+        }
+    code: |-
+        collect_location(location + 20);
+  - type: findreplace
+    find: |-
+        scrDrawTextBoxEx(global.g06_tx, global.g06_ty, global.g06_tw, global.g06_th, -1000, _str[0], _str[1], _str[2], data[0], data[1], data[2]);
+    code: |-
+        var _location = 20 + location;
+        player_id = get_location_player(_location);
+        game_name = apclient_get_player_game(player_id);
+        item_name = apclient_get_item_name(get_location_item(_location), game_name);
+        player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+        hint1 = string_upper(item_name);
+        hint2 = string_upper(player_name);
+        var _tboxy = global.g06_ty;
+        var _cam = view_get_camera(0);
+        if (other.y < (camera_get_view_y(_cam) + 108))
+            _tboxy += 136;
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+gml_Object_o06_zPlayer_Collision_o06_Flag:
+  - type: findreplacetrim
+    find: |-
+        o06__Game.flagX = other.x;
+        o06__Game.flagY = other.y;
+        other.activeTime = 0;
+    code: |-
+        if((other.collected == true && has_item(100 + other.location)) || other.location == 0)
+        {
+            o06__Game.flagX = other.x;
+            o06__Game.flagY = other.y;
+            other.activeTime = 0;
+        }
+  - type: findreplacetrim
+    find: |-
+        var _tbox = scrDrawTextBoxString(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, "game_save");
+    code: |-
+        if ((other.collected == true && has_item(100 + other.location)) || other.location == 0)
+            var _tbox = scrDrawTextBoxString(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, "game_save");
+        else if (other.collected == false)
+        {
+            var _location = 100 + other.location;
+            player_id = get_location_player(_location);
+            game_name = apclient_get_player_game(player_id);
+            item_name = apclient_get_item_name(get_location_item(_location), game_name);
+            player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+            hint1 = string_upper(item_name);
+            hint2 = string_upper(player_name);
+            var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+            other.collected = true;
+        }
+        else
+            var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, "how did you find this?");
+  - type: findreplacetrim
+    find: |-
+        o06__Game.golfStrokes = o06__Game.golfStrokesMax;
+        o06__Game.savePosition = true;
+    code: |-
+        collect_location(100 + other.location);
+        if((other.collected == true && has_item(100 + other.location)) || other.location == 0)
+        {
+            o06__Game.golfStrokes = o06__Game.golfStrokesMax;
+            o06__Game.savePosition = true;
+        }
+        else if (!has_item(100 + other.location))
+        {
+            other.destroy = true;
+        }
+gml_Object_o06_zPlayer_Collision_o06_pTee1:
+  - type: findreplacetrim
+    find: |-
+        o06__Game.tee1 = true;
+        o06__Game.teesFound[0] = true;
+    code: |-
+        collect_location(31);
+  - type: findreplace
+    find: |-
+        var _tbox = scrDrawTextBoxString(global.g06_tx, global.g06_ty, global.g06_tw, global.g06_th, -1000, "holy_tee_collect");
+    code: |-
+        var _location = 31;
+        player_id = get_location_player(_location);
+        game_name = apclient_get_player_game(player_id);
+        item_name = apclient_get_item_name(get_location_item(_location), game_name);
+        player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+        hint1 = string_upper(item_name);
+        hint2 = string_upper(player_name);
+        var _tboxy = global.g06_ty;
+        var _cam = view_get_camera(0);
+        if (other.y < (camera_get_view_y(_cam) + 108))
+            _tboxy += 136;
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+gml_Object_o06_pTee1_Step_0:
+  - type: findreplace
+    find: |-
+        if (o06__Game.tee1)
+    code: |-
+        if (is_location_collected(31))
+gml_Object_o06_zPlayer_Collision_o06_pTee2:
+  - type: findreplacetrim
+    find: |-
+        o06__Game.tee2 = true;
+        o06__Game.teesFound[1] = true;
+    code: |-
+        collect_location(32);
+  - type: findreplace
+    find: |-
+        var _tbox = scrDrawTextBoxString(global.g06_tx, global.g06_ty, global.g06_tw, global.g06_th, -1000, "holy_tee_collect");
+    code: |-
+        var _location = 32;
+        player_id = get_location_player(_location);
+        game_name = apclient_get_player_game(player_id);
+        item_name = apclient_get_item_name(get_location_item(_location), game_name);
+        player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+        hint1 = string_upper(item_name);
+        hint2 = string_upper(player_name);
+        var _tboxy = global.g06_ty;
+        var _cam = view_get_camera(0);
+        if (other.y < (camera_get_view_y(_cam) + 108))
+            _tboxy += 136;
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+gml_Object_o06_pTee2_Step_0:
+  - type: findreplace
+    find: |-
+        if (o06__Game.tee2)
+    code: |-
+        if (is_location_collected(32))
+gml_Object_o06_zPlayer_Collision_o06_pTee3:
+  - type: findreplacetrim
+    find: |-
+        o06__Game.tee3 = true;
+        o06__Game.teesFound[2] = true;
+    code: |-
+        collect_location(33);
+  - type: findreplace
+    find: |-
+        var _tbox = scrDrawTextBoxString(global.g06_tx, global.g06_ty, global.g06_tw, global.g06_th, -1000, "holy_tee_collect");
+    code: |-
+        var _location = 33;
+        player_id = get_location_player(_location);
+        game_name = apclient_get_player_game(player_id);
+        item_name = apclient_get_item_name(get_location_item(_location), game_name);
+        player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+        hint1 = string_upper(item_name);
+        hint2 = string_upper(player_name);
+        var _tboxy = global.g06_ty;
+        var _cam = view_get_camera(0);
+        if (other.y < (camera_get_view_y(_cam) + 108))
+            _tboxy += 136;
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+gml_Object_o06_pTee3_Step_0:
+  - type: findreplace
+    find: |-
+        if (o06__Game.tee3)
+    code: |-
+        if (is_location_collected(33))
+gml_Object_o06_zPlayer_Collision_o06_pTee4:
+  - type: findreplacetrim
+    find: |-
+        o06__Game.tee4 = true;
+        o06__Game.teesFound[3] = true;
+    code: |-
+        collect_location(34);
+  - type: findreplace
+    find: |-
+        var _tbox = scrDrawTextBoxString(global.g06_tx, global.g06_ty, global.g06_tw, global.g06_th, -1000, "holy_tee_collect");
+    code: |-
+        var _location = 34;
+        player_id = get_location_player(_location);
+        game_name = apclient_get_player_game(player_id);
+        item_name = apclient_get_item_name(get_location_item(_location), game_name);
+        player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+        hint1 = string_upper(item_name);
+        hint2 = string_upper(player_name);
+        var _tboxy = global.g06_ty;
+        var _cam = view_get_camera(0);
+        if (other.y < (camera_get_view_y(_cam) + 108))
+            _tboxy += 136;
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+gml_Object_o06_pTee4_Step_0:
+  - type: findreplace
+    find: |-
+        if (o06__Game.tee4)
+    code: |-
+        if (is_location_collected(34))
+gml_Object_o06_zzNPC_Alarm_0:
+  - type: findremove
+    find: |-
+        for (var i = 0; i < 15; i++)
+        {
+            if (o06__Game.npcRescue[i] == npc_id)
+            {
+                instance_destroy();
+                exit;
+            }
+        }
+  - type: findappend
+    find: |-
+        str = scrStringSplit("dialog_lake_center", _textbox_width, 3);
+    code: |-
+        scout_location(41);
+        location = 1;
+        if (is_location_collected(41))
+            instance_destroy();
+  - type: findappend
+    find: |-
+        str = scrStringSplit("dialog_im_lost", _textbox_width, 3);
+    code: |-
+        scout_location(42);
+        location = 2;
+        if (is_location_collected(42))
+            instance_destroy();
+  - type: findappend
+    find: |-
+        str = scrStringSplit("dialog_temple_north", _textbox_width, 3);
+    code: |-
+        scout_location(43);
+        location = 3;
+        if (is_location_collected(43))
+            instance_destroy();
+  - type: findappend
+    find: |-
+        str = scrStringSplit("dialog_water_cave_1", _textbox_width, 3);
+    code: |-
+        scout_location(44);
+        location = 4;
+        if (is_location_collected(44))
+            instance_destroy();
+  - type: findappend
+    find: |-
+        str = scrStringSplit("dialog_temple_east_1", _textbox_width, 3);
+    code: |-
+        scout_location(45);
+        location = 5;
+        if (is_location_collected(45))
+            instance_destroy();
+  - type: findappend
+    find: |-
+        str = scrStringSplit("dialog_sandman", _textbox_width, 3);
+    code: |-
+        scout_location(46);
+        location = 6;
+        if (is_location_collected(46))
+            instance_destroy();
+  - type: findappend
+    find: |-
+        str = scrStringSplit("dialog_desert_cave_1", _textbox_width, 3);
+    code: |-
+        scout_location(47);
+        location = 7;
+        if (is_location_collected(47))
+            instance_destroy();
+  - type: findappend
+    find: |-
+        str = scrStringSplit("dialog_water_save_cave_1", _textbox_width, 3);
+    code: |-
+        scout_location(48);
+        location = 8;
+        if (is_location_collected(48))
+            instance_destroy();
+gml_Object_o06_zzNPC_Collision_o06_zPlayer:
+  - type: findreplace
+    find: |-
+        if (array_length(_npc.str) > 6)
+    code: |-
+        if (_npc.canBeRescued)
+        {
+            var _location = 40 + location;
+            player_id = get_location_player(_location);
+            game_name = apclient_get_player_game(player_id);
+            item_name = apclient_get_item_name(get_location_item(_location), game_name);
+            player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+            hint1 = string_upper(item_name);
+            hint2 = string_upper(player_name);
+            var _tboxy = global.g06_ty;
+            var _cam = view_get_camera(0);
+            if (other.y < (camera_get_view_y(_cam) + 108))
+                _tboxy += 136;
+            var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+        }
+        else if (array_length(_npc.str) > 6)
+  - type: findreplacetrim
+    find: |-
+        for (var i = 0; i < 15; i++)
+        {
+            if (o06__Game.npcRescue[i] == "")
+            {
+                o06__Game.npcRescue[i] = _npc.npc_id;
+                break;
+            }
+        }
+    code: |-
+        switch (npc_id)
+        {
+            case "lake_center":
+                collect_location(41);
+                break;
+
+            case "im_lost":
+                collect_location(42);
+                break;
+
+            case "temple_north":
+                collect_location(43);
+                break;
+
+            case "water_cave":
+                collect_location(44);
+                break;
+
+            case "temple_east":
+                collect_location(45);
+                break;
+
+            case "sandman":
+                collect_location(46);
+                break;
+
+            case "desert_cave":
+                collect_location(47);
+                break;
+
+            case "water_save_cave":
+                collect_location(48);
+                break;
+
+        }
+gml_Object_o06_zPlayer_Collision_o06_pBrake:
+  - type: findreplace
+    find: |-
+        o06__Game.golfBrake = true;
+    code: |-
+        collect_location(50);
+  - type: findreplacetrim
+    find: |-
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, global.g06_ty, global.g06_tw, global.g06_th, -1000, scrString("upgrade_brake_get_1"), scrString("upgrade_brake_get_2"), scrString("upgrade_brake_get_3"));
+    code: |-
+        var _location = 50;
+        player_id = get_location_player(_location);
+        game_name = apclient_get_player_game(player_id);
+        item_name = apclient_get_item_name(get_location_item(_location), game_name);
+        player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+        hint1 = string_upper(item_name);
+        hint2 = string_upper(player_name);
+        var _tboxy = global.g06_ty;
+        var _cam = view_get_camera(0);
+        if (other.y < (camera_get_view_y(_cam) + 108))
+            _tboxy += 136;
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+gml_Object_o06_zPlayer_Collision_o06_pBuster:
+  - type: findremovetrim
+    find: |-
+        with (o06_WallCrack)
+        {
+            image_index = 0;
+            image_speed = 0;
+        }
+  - type: findreplace
+    find: |-
+        o06__Game.golfBuster = true;
+    code: |-
+        collect_location(51);
+  - type: findreplacetrim
+    find: |-
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, global.g06_ty, global.g06_tw, 48, -1000, scrString("upgrade_buster_get_1"), scrString("upgrade_buster_get_2"), "");
+    code: |-
+        var _location = 51;
+        player_id = get_location_player(_location);
+        game_name = apclient_get_player_game(player_id);
+        item_name = apclient_get_item_name(get_location_item(_location), game_name);
+        player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+        hint1 = string_upper(item_name);
+        hint2 = string_upper(player_name);
+        var _tboxy = global.g06_ty;
+        var _cam = view_get_camera(0);
+        if (other.y < (camera_get_view_y(_cam) + 108))
+            _tboxy += 136;
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+gml_Object_o06_zPlayer_Collision_o06_pWater:
+  - type: findreplace
+    find: |-
+        o06__Game.golfWaterRoll = true;
+    code: |-
+        collect_location(52);
+  - type: findreplacetrim
+    find: |-
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, global.g06_ty, global.g06_tw, 48, -1000, scrString("upgrade_water_get_1"), scrString("upgrade_water_get_2"), "");
+    code: |-
+        var _location = 52;
+        player_id = get_location_player(_location);
+        game_name = apclient_get_player_game(player_id);
+        item_name = apclient_get_item_name(get_location_item(_location), game_name);
+        player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+        hint1 = string_upper(item_name);
+        hint2 = string_upper(player_name);
+        var _tboxy = global.g06_ty;
+        var _cam = view_get_camera(0);
+        if (other.y < (camera_get_view_y(_cam) + 108))
+            _tboxy += 136;
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+gml_Object_o06_zPlayer_Collision_o06_pSand:
+  - type: findreplace
+    find: |-
+        o06__Game.golfSandRoll = true;
+    code: |-
+        collect_location(53);
+  - type: findreplacetrim
+    find: |-
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, global.g06_ty, global.g06_tw, global.g06_th, -1000, scrString("upgrade_sand_get_1"), scrString("upgrade_sand_get_2"), scrString("upgrade_sand_get_3"));
+    code: |-
+        var _location = 53;
+        player_id = get_location_player(_location);
+        game_name = apclient_get_player_game(player_id);
+        item_name = apclient_get_item_name(get_location_item(_location), game_name);
+        player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+        hint1 = string_upper(item_name);
+        hint2 = string_upper(player_name);
+        var _tboxy = global.g06_ty;
+        var _cam = view_get_camera(0);
+        if (other.y < (camera_get_view_y(_cam) + 108))
+            _tboxy += 136;
+        var _tbox = scrDrawTextBoxEx(global.g06_tx, _tboxy, global.g06_tw, global.g06_th, -1000, hint1, hint2);
+gml_Object_o06_pBrake_Step_0:
+  - type: findreplace
+    find: |-
+        if (o06__Game.golfBrake)
+    code: |-
+        if (is_location_collected(50))
+gml_Object_o06_pBuster_Step_0:
+  - type: findreplace
+    find: |-
+        if (o06__Game.golfBuster)
+    code: |-
+        if (is_location_collected(51))
+gml_Object_o06_pWater_Step_0:
+  - type: findreplace
+    find: |-
+        if (o06__Game.golfWaterRoll)
+    code: |-
+        if (is_location_collected(52))
+gml_Object_o06_pSand_Step_0:
+  - type: findreplace
+    find: |-
+        if (o06__Game.golfSandRoll)
+    code: |-
+        if (is_location_collected(53))
+gml_GlobalScript_scr06_PlayerLaunch:
+  - type: findappend
+    find: |-
+        o06__Game.golfStrokes -= 1;
+    code: |-
+        if (global.golfaria_start_brakes)
+            o06__Game.golfBrake = true;
+        else
+            o06__Game.golfBrake = has_item(50);
+        o06__Game.golfBuster = has_item(51);
+        o06__Game.golfWaterRoll = has_item(52);
+        o06__Game.golfSandRoll = has_item(53);
+        sandWalk = o06__Game.golfSandRoll;
+        waterWalk = o06__Game.golfWaterRoll;
+        o06__Game.tee1 = has_item(30);
+        o06__Game.tee2 = has_item(31);
+        o06__Game.tee3 = has_item(32);
+        o06__Game.tee4 = has_item(33);
+        if (has_item(40))
+            o06__Game.npcRescue[0] = "temple_north";
+        if (has_item(41))
+            o06__Game.npcRescue[1] = "temple_east";
+        if (has_item(42))
+            o06__Game.npcRescue[2] = "desert_cave";
+        if (has_item(43))
+            o06__Game.npcRescue[3] = "water_save_cave";
+        if (has_item(44))
+            o06__Game.npcRescue[4] = "water_cave";
+        if (has_item(45))
+            o06__Game.npcRescue[5] = "lake_center";
+        if (has_item(46))
+            o06__Game.npcRescue[6] = "im_lost";
+        if (has_item(47))
+            o06__Game.npcRescue[7] = "sandman";
+        for (i = 0; i < get_item_count(0); i++)
+        {
+            o06__Game.clubs[i] = 1000;
+        }
+        if (get_item_count(0) > o06__Game.strokesCollected)
+        {
+            o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
+            o06__Game.golfStrokes = o06__Game.golfStrokesMax;
+            o06__Game.strokesCollected = get_item_count(0);
+            scrSaveGame(0);
+        }
+        for (i = 0; i < get_item_count(20); i++)
+            parbot[i] = true;
+gml_GlobalScript_scr06_SaveGame:
+  - type: findappend
+    find: |-
+        scrWriteReal("golfStrokesMax", golfStrokesMax);
+    code: |-
+        scrWriteReal("strokesCollected", strokesCollected);
+  - type: findreplacetrim
+    find: |-
+        golfSandRoll = scrReadReal("golfSandRoll", 0);
+        golfWaterRoll = scrReadReal("golfWaterRoll", 0);
+        golfBuster = scrReadReal("golfBuster", 0);
+        golfBrake = scrReadReal("golfBrake", 0);
+        o06__Game.totalStrokesUsed = scrReadReal("totalStrokesUsed", 0);
+
+        for (var i = 0; i < 4; i++)
+            o06__Game.teesFound[i] = scrReadReal("tee" + string(i + 1), 0);
+
+        tee1 = scrReadReal("tee1", 0);
+        tee2 = scrReadReal("tee2", 0);
+        tee3 = scrReadReal("tee3", 0);
+        tee4 = scrReadReal("tee4", 0);
+        
+        for (var i = 0; i < 20; i++)
+        {
+            o06__Game.clubs[i] = scrReadReal("clubs" + string(i), 0);
+            o06__Game.parbot[i] = scrReadReal("parBot" + string(i), 0);
+            o06__Game.npcRescue[i] = scrReadString("npcRescue" + string(i), "");
+        }
+    code: |-
+        o06__Game.totalStrokesUsed = scrReadReal("totalStrokesUsed", 0);
+        strokesCollected = scrReadReal("strokesCollected", 0);
+        if (global.golfaria_start_brakes)
+            o06__Game.golfBrake = true;
+        else
+            o06__Game.golfBrake = has_item(50);
+        o06__Game.golfBuster = has_item(51);
+        o06__Game.golfWaterRoll = has_item(52);
+        o06__Game.golfSandRoll = has_item(53);
+        sandWalk = o06__Game.golfSandRoll;
+        waterWalk = o06__Game.golfWaterRoll;
+        o06__Game.tee1 = has_item(30);
+        o06__Game.tee2 = has_item(31);
+        o06__Game.tee3 = has_item(32);
+        o06__Game.tee4 = has_item(33);
+        for (i = 0; i < get_item_count(0); i++)
+            o06__Game.clubs[i] = 1000;
+        if (get_item_count(0) > strokesCollected)
+        {
+            o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
+            o06__Game.golfStrokes = o06__Game.golfStrokesMax;
+            strokesCollected = get_item_count(0);
+        }
+        for (i = 0; i < get_item_count(20); i++)
+            parbot[i] = 1000;
+        if (has_item(40))
+            o06__Game.npcRescue[0] = "temple_north";
+        if (has_item(41))
+            o06__Game.npcRescue[1] = "temple_east";
+        if (has_item(42))
+            o06__Game.npcRescue[2] = "desert_cave";
+        if (has_item(43))
+            o06__Game.npcRescue[3] = "water_save_cave";
+        if (has_item(44))
+            o06__Game.npcRescue[4] = "water_cave";
+        if (has_item(45))
+            o06__Game.npcRescue[5] = "lake_center";
+        if (has_item(46))
+            o06__Game.npcRescue[6] = "im_lost";
+        if (has_item(47))
+            o06__Game.npcRescue[7] = "sandman";
+gml_Object_o06_Birdie_Create_0:
+  - type: findreplace
+    find: |-
+        val = 5;
+    code: |-
+        val = 2;
+gml_Object_o06_Eagle_Create_0:
+  - type: findreplace
+    find: |-
+        val = 10;
+    code: |-
+        val = 3;
+gml_Object_o06_bCyberGopher_Step_0:
+  - type: findreplace
+    find: |-
+        if (scr06_CalcPercentCompletion() == 100)
+    code: |-
+        if (scr06_CalcPercentCompletion() >= 100)
