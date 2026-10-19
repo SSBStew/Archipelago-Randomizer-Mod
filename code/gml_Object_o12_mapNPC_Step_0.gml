@@ -147,7 +147,8 @@ if (!global.textboxExists)
             {
                 convo = 0;
                 activate = false;
-                o12__Game.story = 3;
+				if (o12__Game.story < 3)
+                    o12__Game.story = 3;
                 kill = true;
             }
         }
@@ -300,7 +301,8 @@ if (!global.textboxExists)
                     with (o12_mapRubble)
                         visible = true;
                     
-                    o12__Game.story = 8;
+                    if (o12__Game.story < 8)
+						o12__Game.story = 8;
                     convo++;
                 }
                 else
@@ -361,7 +363,8 @@ if (!global.textboxExists)
                     else
                     {
                         scrDrawTextBoxOpenedSplit(scrString("npc_southmonk_04"));
-                        o12__Game.story = 23;
+						if (o12__Game.story < 23)
+							o12__Game.story = 23;
                     }
                 }
                 
@@ -574,7 +577,8 @@ if (!global.textboxExists)
                     else
                     {
                         scrDrawTextBoxOpenedSplit(scrString("npc_hermit_10"));
-                        o12__Game.story = 14;
+						if (o12__Game.story < 14)
+							o12__Game.story = 14;
                     }
                 }
                 
@@ -773,7 +777,8 @@ if (!global.textboxExists)
             {
                 convo = 0;
                 activate = false;
-                o12__Game.story = 21;
+				if (o12__Game.story < 21)
+                    o12__Game.story = 21;
                 kill = true;
             }
         }
@@ -1274,7 +1279,8 @@ if (!global.textboxExists)
                 {
                     scrDrawTextBoxOpenedSplit(scrString("npc_nun_02"));
 					collect_location(304);
-                    o12__Game.story = 10;
+					if (o12__Game.story < 10)
+                        o12__Game.story = 10;
                 }
                 
                 activate = false;
@@ -1374,8 +1380,8 @@ if (!global.textboxExists)
                         
                         with (oTextBox)
                             height = 48;
-                        
-                        o12__Game.story = 5;
+                        if (o12__Game.story < 5)
+							o12__Game.story = 5;
                     }
                 }
                 else if (o12__Game.teeth >= 10000)
@@ -1399,7 +1405,8 @@ if (!global.textboxExists)
                         with (oTextBox)
                             height = 48;
                         
-                        o12__Game.story = 5;
+                        if (o12__Game.story < 5)
+							o12__Game.story = 5;
                         o12__Game.teeth -= 10000;
                     }
                 }
