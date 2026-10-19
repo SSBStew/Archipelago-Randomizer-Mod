@@ -1,6 +1,11 @@
 gml_Object_o12_mapChest_Step_0:
   - type: findreplace
     find: |-
+        if (o12__Game.story < 16)
+    code: |-
+        if (!is_location_collected(407))
+  - type: findreplace
+    find: |-
         if (!open)
         {
             if (o12__Game.chests[chestID] == 1)
@@ -101,6 +106,48 @@ gml_Object_o12__Game_Other_17:
     code: |-
         collect_location(303);
 gml_Object_o12__Game_Other_13:
+  - type: findreplace
+    find: |-
+        story = 9;
+    code: |-
+        if (o12__Game.story < 9)
+            story = 9;
+  - type: findreplace
+    find: |-
+        story = 15;
+    code: |-
+        if (o12__Game.story < 15)
+            story = 15;
+  - type: findreplace
+    find: |-
+        story = 16;
+    code: |-
+        if (o12__Game.story < 16)
+            story = 16;
+  - type: findreplace
+    find: |-
+        story = 18;
+    code: |-
+        if (o12__Game.story < 18)
+            story = 18;
+  - type: findreplace
+    find: |-
+        story = 19;
+    code: |-
+        if (o12__Game.story < 19)
+            story = 19;
+  - type: findreplace
+    find: |-
+        story = 20;
+    code: |-
+        if (o12__Game.story < 20)
+            story = 20;
+  - type: findreplace
+    find: |-
+        story = 22;
+    code: |-
+        if (o12__Game.story < 22)
+            story = 22;
   - type: findappendtrim
     find: |-
         if (!instance_exists(oTextBox))
@@ -196,3 +243,9 @@ gml_Object_o12_mapDynamite_Step_0:
     code: |-
         if (o12__Game.story < 13)
             o12__Game.story = 13;
+gml_Object_o12_mapBoss_Step_1:
+  - type: findreplace
+    find: |-
+        else if (o12__Game.area == 129 && o12__Game.story >= 16)
+    code: |-
+        else if (o12__Game.area == 129 && is_location_collected(407))
