@@ -339,7 +339,7 @@ if (!global.textboxExists)
         }
         else if (convoID == 12)
         {
-            if (o12__Game.story >= 23)
+            if (is_location_collected(302))
             {
                 scrDrawTextBoxSplit(scrString("npc_southmonk_01"));
                 convo = 0;
