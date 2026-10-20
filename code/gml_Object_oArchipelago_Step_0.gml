@@ -55,6 +55,7 @@ switch (apclient_json_source())
         global.porgy_radar = apclient_json_number_at(0, "porgy_radar");
 		global.divers_lever_check = apclient_json_number_at(0, "divers_lever_check");
 		global.golfaria_start_brakes = apclient_json_number_at(0, "golfaria_start_brakes");
+		global.golfaria_difficulty = apclient_json_number_at(0, "golfaria_difficulty");
         break;
     case "ap_socket_connected":
         apclient_connect_slot(global.ap_player, global.ap_password, "[]");
