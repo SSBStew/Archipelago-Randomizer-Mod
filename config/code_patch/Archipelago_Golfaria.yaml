@@ -91,7 +91,7 @@ gml_Object_o06_zPlayer_Collision_o06_Flag:
         o06__Game.savePosition = true;
     code: |-
         collect_location(100 + other.location);
-        if((other.collected == true && has_item(100 + other.location)) || other.location == 0)
+        if((global.golfaria_difficulty != 4 && other.collected == true && has_item(100 + other.location)) || other.location == 0)
         {
             o06__Game.golfStrokes = o06__Game.golfStrokesMax;
             o06__Game.savePosition = true;
@@ -517,7 +517,8 @@ gml_GlobalScript_scr06_PlayerLaunch:
         }
         if (get_item_count(0) > o06__Game.strokesCollected)
         {
-            o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
+            if (global.golfaria_difficulty != 4)
+                o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
             o06__Game.golfStrokes = o06__Game.golfStrokesMax;
             o06__Game.strokesCollected = get_item_count(0);
             scrSaveGame(0);
@@ -572,7 +573,8 @@ gml_GlobalScript_scr06_SaveGame:
             o06__Game.clubs[i] = 1000;
         if (get_item_count(0) > strokesCollected)
         {
-            o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
+            if (global.golfaria_difficulty != 4)
+                o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
             o06__Game.golfStrokes = o06__Game.golfStrokesMax;
             strokesCollected = get_item_count(0);
         }
@@ -612,3 +614,14 @@ gml_Object_o06_bCyberGopher_Step_0:
         if (scr06_CalcPercentCompletion() == 100)
     code: |-
         if (scr06_CalcPercentCompletion() >= 100)
+gml_Object_o06_zPlayer_Collision_o06_pTeeHole:
+  - type: findappend
+    find: |-
+        o06__Game.tee4 = false;
+    code: |-
+        if (global.golfaria_difficulty == 4)
+        {
+            o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
+            o06__Game.golfStrokes = o06__Game.golfStrokesMax;
+            o06__Game.strokesCollected = get_item_count(0);
+        }
