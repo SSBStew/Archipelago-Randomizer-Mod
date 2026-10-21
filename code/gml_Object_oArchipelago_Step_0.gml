@@ -53,7 +53,6 @@ switch (apclient_json_source())
         }
         global.porgy_check_on_touch = apclient_json_number_at(0, "porgy_check_on_touch");
         global.porgy_radar = apclient_json_number_at(0, "porgy_radar");
-		global.divers_lever_check = apclient_json_number_at(0, "divers_lever_check");
 		global.golfaria_start_brakes = apclient_json_number_at(0, "golfaria_start_brakes");
 		global.golfaria_difficulty = apclient_json_number_at(0, "golfaria_difficulty");
         break;
