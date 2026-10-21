@@ -3,22 +3,47 @@ gml_Object_o19_Mas_Create_0:
     find: |-
         scrLoadGame();
     code: |-
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 9; i++)
             global.diversRelicCollected[i] = 0;
         for (i = 0; i < 3; i++)
             if (has_item(120 + i))
                 global.g19_emblem[i] = true;
         for (i = 0; i < 9; i++)
+        {
             scout_location(110 + i);
+            hint_location(110 + i);
+        }
         for (i = 0; i < 6; i++)
+        {
             scout_location(120 + i);
+            if (has_item(131))
+                hint_location(120 + i);
+        }
         for (i = 0; i < 9; i++)
+        {
             scout_location(130 + i);
+            if (has_item(132))
+                hint_location(130 + i);
+        }
         for (i = 0; i < 5; i++)
+        {
             scout_location(140 + i);
+            if (has_item(133))
+                hint_location(140 + i);
+        }
         for (i = 0; i < 3; i++)
+        {
             scout_location(150 + i);
+            if (has_item(134))
+                hint_location(150 + i);
+        }
 gml_Object_o19_Mas_Draw_0:
+  - type: findreplace
+    find: |-
+        draw_sprite(s19_MenuItemTab, i, xMenu + 32 + (16 * i), (yMenu - 8) + textInsert);
+    code: |-
+        if (i == 0 || has_item(130 + i))
+            draw_sprite(s19_MenuItemTab, i, xMenu + 32 + (16 * i), (yMenu - 8) + textInsert);
   - type: findreplacetrim
     find: |-
         if (i == menuSel)
@@ -50,8 +75,16 @@ gml_Object_o19_Mas_Draw_0:
     code: |-
         while (global.diversRelicCollected[i] < get_item_count(110 + i))
         {
-            global.g19_relicStock[i] += 3;
+            if (i == 7)
+                global.g19_relicStock[i] += 1;
+            else
+                global.g19_relicStock[i] += 3;
             global.diversRelicCollected[i]++;
+        }
+        while global.diversRelicCollected[8] < get_item_count(110 + 8)
+        {
+            global.g19_cash = min(global.g19_cash + 500, 9999);
+            global.diversRelicCollected[8]++;
         }
 gml_Object_o19_Mas_Other_10:
   - type: findreplacetrim
@@ -75,12 +108,25 @@ gml_Object_o19_Mas_Other_10:
     code: |-
         collect_location(110 + (10 * subMenu) + menuSel);
         scrSaveGame(0);
+  - type: findappend
+    find: |-
+        subMenu = scr19_MenuInput(pressLeft, pressRight, subMenu, 0, 4, true);
+    code: |-
+        while (!has_item(subMenu + 130) && subMenu != 0)
+        {
+            if (pressLeft)
+                subMenu--;
+            else if (pressRight && subMenu < 5)
+                subMenu++;
+            else
+                subMenu = 0;
+        }
 gml_GlobalScript_scr19_SaveGame:
   - type: findprepend
     find: |-
         scrWriteReal("level", global.g19_level);
     code: |-
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 9; i++)
             scrWriteReal("diversRelicCollected_" + string(i), global.diversRelicCollected[i]);
   - type: findprepend
     find: |-
@@ -88,7 +134,7 @@ gml_GlobalScript_scr19_SaveGame:
     code: |-
         for (i = 0; i < 85; i++)
             global.diversItemCollected[i] = scrReadReal("diversItemCollected_" + string(i), false);
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 9; i++)
             global.diversRelicCollected[i] = scrReadReal("diversRelicCollected_" + string(i), false);
   - type: findreplace
     find: |-
@@ -117,7 +163,42 @@ gml_Object_o19_Mas_Other_12:
         for (i = 0; i < r; i++)
                xpMult = xpMult * 2;
         sumAdd = sumAdd * xpMult;
+  - type: findprepend
+    find: |-
+        global.g19_doorOpen[10] = true;
+    code: |-
+        collect_location(200);
 gml_Object_o19_Chest_Step_0:
+  - type: findreplacetrim
+    find: |-
+        if (state == -1)
+        {
+            if (global.g19_chestOpen[num])
+            {
+                state = 10;
+                image_index = 1;
+                visible = true;
+            }
+            else
+            {
+                state = 0;
+            }
+        }
+    code: |-
+        if (state == -1)
+        {
+            scout_location(num);
+            if (global.g19_chestOpen[num])
+            {
+                state = 10;
+                image_index = 1;
+                visible = true;
+            }
+            else
+            {
+                state = 0;
+            }
+        }
   - type: findreplacetrim
     find: |-
         switch (type[num])
@@ -176,24 +257,27 @@ gml_Object_o19_Lizard_Step_0:
                 textBox = scr19_BGText("bg_switch_done");
         }
     code: |-
-        if (cSwitch.state == 0 && global.divers_lever_check == 0)
+        if (cSwitch.state == 0)
         {
             cSwitch.state = 1;
-            
-            with (o19_Mas)
-                textBox = scr19_BGText("bg_flick_switch");
+            o19_Mas.textBoxLines = 2;
+            player_id = get_location_player(90 + cSwitch.num);
+            game_name = apclient_get_player_game(player_id);
+            player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+            item_name = apclient_get_item_name(get_location_item(90 + cSwitch.num), game_name);
+            str1 = player_name;
+            str2 = item_name;
+            str1 = string_upper(str1);
+            str2 = string_upper(str2);
+            o19_Mas.textBox[0] = str1;
+            o19_Mas.textBox[1] = str2;
         }
-        else if (global.divers_lever_check == 0)
+        else
         {
             with (o19_Mas)
                 textBox = scr19_BGText("bg_switch_done");
         }
-        else
-        {
-            cSwitch.state = 1;
-            o19_Mas.textBoxLines = 1;
-            o19_Mas.textBox[0] = "THE GATE OPENS FOR A MOMENT.";
-        }
+        
   - type: findreplacetrim
     find: |-
         switch (chestContent)
@@ -218,17 +302,36 @@ gml_Object_o19_Lizard_Step_0:
                 break;
         }
     code: |-
-        o19_Mas.textBoxLines = 1;
-        o19_Mas.textBox[0] = "YOU FOUND AN ITEM.";
+        o19_Mas.textBoxLines = 2;
+        player_id = get_location_player(cChest.num);
+        game_name = apclient_get_player_game(player_id);
+        player_name = scrStringManual("ap_for", 0) + " " + apclient_get_player_alias(player_id);
+        item_name = apclient_get_item_name(get_location_item(cChest.num), game_name);
+        str1 = player_name;
+        str2 = item_name;
+        str1 = string_upper(str1);
+        str2 = string_upper(str2);
+        o19_Mas.textBox[0] = str1;
+        o19_Mas.textBox[1] = str2;
 gml_Object_o19_GateV2_Create_0:
   - type: findreplace
     find: |-
         if (global.g19_doorOpen[2] && global.g19_doorOpen[3])
     code: |-
-        if ((global.g19_doorOpen[2] && global.g19_doorOpen[3] && global.divers_lever_check == 0) || (has_item(102) && has_item(103)))
+        if (has_item(102) && has_item(103))
 gml_Object_o19_Emblem_Step_0:
   - type: findreplace
     find: |-
         if (global.g19_emblem[num])
     code: |-
         if (is_location_collected(100 + num))
+gml_Object_o19_bossMap01_Create_0:
+  - type: findreplace
+    find: |-
+        door[2] = instance_create(1280, 608, o19_GateH);
+        door[1] = instance_create(672, 1136, o19_GateH);
+        door[0] = instance_create(1136, 1120, o19_GateH);
+    code: |-
+        door[2] = instance_create(0, 384, o19_GateH);
+        door[1] = instance_create(0, 384, o19_GateH);
+        door[0] = instance_create(0, 384, o19_GateH);
