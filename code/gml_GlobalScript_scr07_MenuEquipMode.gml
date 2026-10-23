@@ -125,7 +125,7 @@ function scr07_MenuEquipMode()
         }
         else if (pressDown)
         {
-            if (modSlot[sel] < 4)
+            if (modSlot[sel] < 4 && modSlot[sel] != 0)
             {
                 with (o07__Game)
                 {
