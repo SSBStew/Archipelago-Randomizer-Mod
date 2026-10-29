@@ -473,33 +473,55 @@ gml_Object_oPauseMenu_Other_22:
 gml_Object_oPauseMenu_Draw_0:
   - type: findreplacetrim
     find: |-
-      else if (itemType[i] == TYPE_DUAL || itemType[i] == TYPE_DUAL_INT)
-      {
-          draw_text(LEFT_TEXT_X, _yPos, itemName[i]);
-          var _index = itemIndex[i];
-          var _values = itemValues[i];
-          draw_set_halign(fa_right);
-          draw_text(RIGHT_TEXT_X, _yPos, string(_values[_index]));
-          draw_set_halign(fa_left);
-          _yPos += 12;
-      }
-    code: |-
-      else if (itemType[i] == TYPE_DUAL || itemType[i] == TYPE_DUAL_INT)
-      {
-          draw_text(LEFT_TEXT_X, _yPos, itemName[i]);
-          var _index = itemIndex[i];
-          var _values = itemValues[i];
-          draw_set_halign(fa_right);
-          if (i <= 1  && menuHeader == "AP SETTINGS") {
-            var text = "OFF";
-            if (_values[_index] == 1)
-              text = "GOLD";
-            else if (_values[_index] == 2)
-              text = "CHERRY";
-            draw_text(RIGHT_TEXT_X, _yPos, text)
-          }
-          else
+        else if (itemType[i] == TYPE_DUAL || itemType[i] == TYPE_DUAL_INT)
+        {
+            draw_text(LEFT_TEXT_X, _yPos, itemName[i]);
+            var _index = itemIndex[i];
+            var _values = itemValues[i];
+            draw_set_halign(fa_right);
             draw_text(RIGHT_TEXT_X, _yPos, string(_values[_index]));
-          draw_set_halign(fa_left);
-          _yPos += 12;
-      }
+            draw_set_halign(fa_left);
+            _yPos += 12;
+        }
+    code: |-
+        else if (itemType[i] == TYPE_DUAL || itemType[i] == TYPE_DUAL_INT)
+        {
+            draw_text(LEFT_TEXT_X, _yPos, itemName[i]);
+            var _index = itemIndex[i];
+            var _values = itemValues[i];
+            draw_set_halign(fa_right);
+            if (i <= 0  && menuHeader == "AP SETTINGS") 
+            {
+                var text = "OFF";
+                if (_values[_index] == 1)
+                    text = "GOLD";
+                else if (_values[_index] == 2)
+                    text = "CHERRY";
+                draw_text(RIGHT_TEXT_X, _yPos, text)
+            }
+            else if (i <= 2  && menuHeader == "AP SETTINGS")
+            {
+                var text = "OFF";
+                if (_values[_index] == 1)
+                    text = "ON";
+                draw_text(RIGHT_TEXT_X, _yPos, text)
+            }
+            else if (i <= 3  && menuHeader == "AP SETTINGS")
+            {
+                var text = "NORMAL";
+                if (_values[_index] == 1)
+                    text = "INFINITE";
+                draw_text(RIGHT_TEXT_X, _yPos, text)
+            }
+            else if (i <= 4  && menuHeader == "AP SETTINGS")
+            {
+                var text = "NORMAL";
+                if (_values[_index] == 1)
+                    text = "GUARANTEED";
+                draw_text(RIGHT_TEXT_X, _yPos, text)
+            }
+            else
+                draw_text(RIGHT_TEXT_X, _yPos, string(_values[_index]));
+            draw_set_halign(fa_left);
+            _yPos += 12;
+        }
