@@ -1,4 +1,12 @@
 gml_Object_o06__Game_Create_0:
+  - type: findreplace
+    find: |-
+        golfStrokesMax = 20;
+    code: |-
+        if (global.golfaria_difficulty != 4)
+            golfStrokesMax = 20;
+        else
+            golfStrokesMax = global.golfaria_hardcore_strokes + get_item_count(0);
   - type: findreplacetrim
     find: |-
         golfSandRoll = false;
@@ -59,7 +67,7 @@ gml_Object_o06_zPlayer_Collision_o06_Flag:
         o06__Game.flagY = other.y;
         other.activeTime = 0;
     code: |-
-        if((other.collected == true && has_item(100 + other.location)) || other.location == 0)
+        if((is_location_collected(other.location) && has_item(100 + other.location)) || other.location == 0)
         {
             o06__Game.flagX = other.x;
             o06__Game.flagY = other.y;
@@ -91,7 +99,7 @@ gml_Object_o06_zPlayer_Collision_o06_Flag:
         o06__Game.savePosition = true;
     code: |-
         collect_location(100 + other.location);
-        if((global.golfaria_difficulty != 4 && other.collected == true && has_item(100 + other.location)) || other.location == 0)
+        if((global.golfaria_difficulty != 4 && is_location_collected(other.location) && has_item(100 + other.location)) || other.location == 0)
         {
             o06__Game.golfStrokes = o06__Game.golfStrokesMax;
             o06__Game.savePosition = true;
@@ -100,6 +108,7 @@ gml_Object_o06_zPlayer_Collision_o06_Flag:
         {
             other.destroy = true;
         }
+        collect_location(100 + other.location);
 gml_Object_o06_zPlayer_Collision_o06_pTee1:
   - type: findreplacetrim
     find: |-
@@ -517,8 +526,10 @@ gml_GlobalScript_scr06_PlayerLaunch:
         }
         if (get_item_count(0) > o06__Game.strokesCollected)
         {
-            if (global.golfaria_difficulty != 4)
+            if (global.golfaria_difficulty != 4 || global.golfaria_endgame)
                 o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
+            else
+                o06__Game.golfStrokesMax = min(global.golfaria_hardcore_strokes + get_item_count(0), 20);
             o06__Game.golfStrokes = o06__Game.golfStrokesMax;
             o06__Game.strokesCollected = get_item_count(0);
             scrSaveGame(0);
@@ -533,6 +544,8 @@ gml_GlobalScript_scr06_SaveGame:
         scrWriteReal("strokesCollected", strokesCollected);
   - type: findreplacetrim
     find: |-
+        golfStrokesMax = scrReadReal("golfStrokesMax", 20);
+        golfStrokes = golfStrokesMax;
         golfSandRoll = scrReadReal("golfSandRoll", 0);
         golfWaterRoll = scrReadReal("golfWaterRoll", 0);
         golfBuster = scrReadReal("golfBuster", 0);
@@ -575,6 +588,8 @@ gml_GlobalScript_scr06_SaveGame:
         {
             if (global.golfaria_difficulty != 4)
                 o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
+            else
+                o06__Game.golfStrokesMax = min(global.golfaria_hardcore_strokes + get_item_count(0), 20);
             o06__Game.golfStrokes = o06__Game.golfStrokesMax;
             strokesCollected = get_item_count(0);
         }
@@ -619,6 +634,7 @@ gml_Object_o06_zPlayer_Collision_o06_pTeeHole:
     find: |-
         o06__Game.tee4 = false;
     code: |-
+        global.golfaria_endgame = true;
         if (global.golfaria_difficulty == 4)
         {
             o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
