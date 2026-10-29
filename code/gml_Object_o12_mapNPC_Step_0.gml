@@ -1020,7 +1020,7 @@ if (!global.textboxExists)
         }
         else if (convoID == 36)
         {
-            if (o12__Game.storyGunsmith >= 1)
+            if (is_location_collected(307))
             {
                 scrDrawTextBoxSplit(scrString("npc_dealer_01"));
                 activate = false;
@@ -2041,7 +2041,7 @@ if (!global.textboxExists)
                 if (o12__Game.teeth >= 100000)
                 {
                     var _gotItem = scr12_InvAdd("ABYSSIDIAN", SOUND_ITEM_BUY);
-                    
+                    collect_location(307);
                     if (!_gotItem)
                     {
                         with (o12__Game)
