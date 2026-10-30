@@ -240,7 +240,10 @@ gml_Object_o19_Mas_Other_12:
         if (global.g19_relicStock[relicRewardType] < 9)
             global.g19_relicStock[relicRewardType]++;
     code: |-
-        global.g19_relicStock[relicRewardType] += global.divers_relic_mult;
+        if (relicRewardType == 6)
+            global.g19_relicStock[relicRewardType] += global.divers_store_depth;
+        else
+            global.g19_relicStock[relicRewardType] += global.divers_relic_mult;
   - type: findprepend
     find: |-
         global.g19_experience += sumAdd;
