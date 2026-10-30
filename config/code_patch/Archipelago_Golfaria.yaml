@@ -584,15 +584,13 @@ gml_GlobalScript_scr06_SaveGame:
         o06__Game.tee4 = has_item(33);
         for (i = 0; i < get_item_count(0); i++)
             o06__Game.clubs[i] = 1000;
-        if (get_item_count(0) > strokesCollected)
-        {
-            if (global.golfaria_difficulty != 4)
-                o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
-            else
-                o06__Game.golfStrokesMax = min(global.golfaria_hardcore_strokes + get_item_count(0), 20);
-            o06__Game.golfStrokes = o06__Game.golfStrokesMax;
-            strokesCollected = get_item_count(0);
-        }
+        if (global.golfaria_difficulty != 4)
+            o06__Game.golfStrokesMax = 20 + (get_item_count(0) * 3);
+        else
+            o06__Game.golfStrokesMax = min(global.golfaria_hardcore_strokes + get_item_count(0), 20);
+        o06__Game.golfStrokes = o06__Game.golfStrokesMax;
+        strokesCollected = get_item_count(0);
+        
         for (i = 0; i < get_item_count(20); i++)
             parbot[i] = 1000;
         if (has_item(40))
