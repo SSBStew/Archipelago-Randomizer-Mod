@@ -386,6 +386,7 @@ gml_Object_o12_mapFallen_Step_0:
             else
                 destroy = true;
             image_speed = 0;
+            destroyTimer = 5;
             image_index = type - 1;
             init = true
         }
