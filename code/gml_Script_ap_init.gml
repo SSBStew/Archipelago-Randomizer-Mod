@@ -65,3 +65,4 @@ global.ext_apclient_json_get_number = external_define("gm-apclientpp.dll", "apcl
 global.ext_apclient_json_number_at = external_define("gm-apclientpp.dll", "apclient_json_number_at", 0, 0, 2, 0, 1);
 global.ext_apclient_json_dump = external_define("gm-apclientpp.dll", "apclient_json_dump", 0, 1, 1, 0);
 global.ext_apclient_json_source = external_define("gm-apclientpp.dll", "apclient_json_source", 0, 1, 0);
+global.ext_apclient_get_permission = external_define("gm-apclientpp.dll", "apclient_get_permission", 0, 0, 1, 1);

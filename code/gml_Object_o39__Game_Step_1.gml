@@ -36,7 +36,7 @@ if (loadGame)
             }
         }
     }
-    if (!scr39_InvHas("THE SPOON"))
+    if (!has_item(3))
     {
         currRoom = ROOM_WARNING;
         state = STATE_WARNING;

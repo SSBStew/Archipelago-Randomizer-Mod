@@ -3,12 +3,13 @@ if (!global.paused && !ds_queue_empty(global.ap_message_queue) && !instance_exis
     global.ap_message = ds_queue_dequeue(global.ap_message_queue);
     scrSaveNotification(global.ARCHIPELAGO_NOTIFICATION);
 }
-apclient_poll();
+debugThing = apclient_poll();
 switch (apclient_json_source())
 {
     case "ap_room_info":
         global.SAVE_FILE = "save_" + apclient_get_seed() + "_" + apclient_get_slot() + ".ufo";
         global.SAVE_FILE = string_replace_all(global.SAVE_FILE, "*", "");
+		global.server_release_mode = apclient_get_permission("release");
         break;
     case "ap_slot_refused":
         global.ap_connecting = 0;
@@ -52,7 +53,20 @@ switch (apclient_json_source())
         }
         global.porgy_check_on_touch = apclient_json_number_at(0, "porgy_check_on_touch");
         global.porgy_radar = apclient_json_number_at(0, "porgy_radar");
-		global.divers_lever_check = apclient_json_number_at(0, "divers_lever_check");
+        global.divers_xp = apclient_json_number_at(0, "divers_xp");
+        global.divers_cash = apclient_json_number_at(0, "divers_cash");
+        global.divers_relic_mult = apclient_json_number_at(0, "divers_relic_mult");
+        global.divers_store_depth = apclient_json_number_at(0, "divers_store_depth");
+        global.divers_start_flippers = apclient_json_number_at(0, "divers_start_flippers");
+        global.divers_pearl = apclient_json_number_at(0, "divers_pearl");
+        global.golfaria_start_brakes = apclient_json_number_at(0, "golfaria_start_brakes");
+        global.golfaria_difficulty = apclient_json_number_at(0, "golfaria_difficulty");
+        global.golfaria_hardcore_strokes = apclient_json_number_at(0, "golfaria_hardcore_strokes");
+        global.grimstone_xp = apclient_json_number_at(0, "grimstone_xp");
+        global.grimstone_cash = apclient_json_number_at(0, "grimstone_cash");
+        global.grimstone_shops = apclient_json_number_at(0, "grimstone_shops");
+        global.grimstone_random_characters = apclient_json_number_at(0, "grimstone_random_characters");
+        global.grimstone_duplicate_characters = apclient_json_number_at(0, "grimstone_duplicate_characters");
         break;
     case "ap_socket_connected":
         apclient_connect_slot(global.ap_player, global.ap_password, "[]");
