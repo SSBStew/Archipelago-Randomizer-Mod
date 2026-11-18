@@ -1,0 +1,109 @@
+#pine code
+# OVERBOLD: +1 mine filler check (start with 0 instead of vanilla 3)
+# 20 id is for mines (3 by default, extra mines are extra filler checks)
+gml_Object_o30_Game_Other_14:
+  - type: findprepend
+    find: |-
+      var player = instance_create(176, 92, o30_Player);
+    code: |-
+      mines = min(mines - 3 + get_item_count(20), 99);
+
+#disable all gear at start
+gml_Object_o30_Game_Create_0:
+  - type: findappend
+    find: |-
+      gearHike[i] = false;
+    code: |-
+      gear_available[i] = false;
+
+#disable purchasing gear you dont have
+gml_Object_o30_Game_Other_12:
+  - type: findprepend
+    find: |-
+      if (money < gearPrice)
+    code: |-
+      if (!gear_available[gearIndex])
+      {
+        scrSfx(soundNope, 30);
+        holdFlicker = 64;
+        scrMessageSet("NOT UNLOCKED YET!");
+        exit;
+      }
+#force player to raise stakes on later rounds
+  - type: findreplace
+    find: |-
+      if (selX == 2)
+    code: |-
+      if (selX == 2 && threatCount < lvl)
+      {
+        scrSfx(soundNope, 30);
+        var tempStake = string(lvl * 100);
+        scrMessageSet("MUST RAISE PRIZE TO " + tempStake + " BEFORE CONTINUING");
+      }
+      else if (selX == 2)
+# enable any upgrades youve unlocked at the start / between rounds. replace false with has_item(full sale)
+# ID's 0-15 are locations for upgrades 0-15 (so 0 is hp upgrade, 1 is medkit, ... 15 is lure bombs)
+gml_Object_o30_Game_Other_10:
+  - type: append
+    code: |-
+      for (var i = 0; i < NUM_GEAR; i++)
+      {
+      if (has_item(i))
+        gear_available[i] = true;
+      }
+# 21 id for better sales (discounting 100 like vanilla instead of 50)
+  - type: append
+    code: |-
+      if (has_item(21))
+        SALE_DISCOUNT = 100;
+      else
+        SALE_DISCOUNT = 50;
+#make sales and hikes not hit unavailable gear
+  - type: findreplace
+    find: |-
+      until ((gear[saleItem] < GEAR_LEVELS[saleItem] && (GEAR_PRICE[saleItem][gear[saleItem]] - SALE_DISCOUNT) <= money) || loopEscape > 50);
+    code: |-
+      until ((gear[saleItem] < GEAR_LEVELS[saleItem] && (GEAR_PRICE[saleItem][gear[saleItem]] - SALE_DISCOUNT) <= money && gear_available[saleItem]) || loopEscape > 100);
+  - type: findreplace
+    find: |-
+      until ((gear[hikeItem] < GEAR_LEVELS[hikeItem] && hikeItem != saleItem) || loopEscape > 50);
+    code: |-
+      until ((gear[hikeItem] < GEAR_LEVELS[hikeItem] && hikeItem != saleItem && gear_available[hikeItem]) || loopEscape > 100);
+
+#disable drawing gear icons for gear you don't have
+gml_Object_o30_Game_Draw_0:
+  - type: findreplacetrim
+    find: |-
+      if (gear[g] > 0 || (gearFlash[g] && flicker8))
+        draw_sprite(s30_GearIcons, displayIcon, xPos, yPos);
+      else
+        draw_sprite(s30_GearIcons, displayIcon + 1, xPos, yPos);
+    code: |-
+      if (gear_available[g] == true)
+      {
+        if (gear[g] > 0 || (gearFlash[g] && flicker8))
+          draw_sprite(s30_GearIcons, displayIcon, xPos, yPos);
+        else
+          draw_sprite(s30_GearIcons, displayIcon + 1, xPos, yPos);
+      }
+#and disable price showing for them
+  - type: findappend
+    find: |-
+      SHOW_PRICES
+    code: |-
+       && gear_available[g] == true
+       
+#get checks after every wave for your max achieved prize
+#locations 1-20 are prize locations
+#locations 21-28 are round locations
+gml_Object_o30_Game_Other_17:
+  - type: findappend
+    find: |-
+      prizeDisplay = 0;
+    code: |-
+      collect_location(lvl + 20);
+      var tempPrize = prize / 100;
+      for (i = 1; i <= tempPrize; i++)
+      {
+        collect_location(i);
+      }
